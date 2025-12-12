@@ -2,6 +2,8 @@ import { Telegraf, Markup } from 'telegraf';
 import type { Context } from 'telegraf';
 import type { Message } from 'telegraf/types';
 import dotenv from 'dotenv';
+import http from 'http';  // Добавь в начало файла!
+
 dotenv.config();
 
 const BOT_TOKEN = process.env.BOT_TOKEN!;
@@ -112,10 +114,23 @@ bot.on('message', async (ctx: Context) => {
 });
 
 // Запуск
+// Запуск бота
 bot.launch().then(async () => {
   console.log('🚀 Бот запущен');
   await sendPinnedButtonToGroup();
 }).catch(console.error);
+
+// ✅ HTTP сервер для Render (с типами TypeScript)
+
+const PORT = Number(process.env.PORT || 3000);
+const server = http.createServer((req: http.IncomingMessage, res: http.ServerResponse) => {
+    res.writeHead(200, { 'Content-Type': 'text/plain' });
+    res.end('🟢 Telegram Bot OK');
+});
+
+server.listen(PORT, '0.0.0.0', () => {
+    console.log(`🌐 HTTP сервер на порту ${PORT} ✅`);
+});
 
 process.once('SIGINT', () => bot.stop('SIGINT'));
 process.once('SIGTERM', () => bot.stop('SIGTERM'));

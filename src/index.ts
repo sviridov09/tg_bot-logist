@@ -119,3 +119,10 @@ bot.launch().then(async () => {
 
 process.once('SIGINT', () => bot.stop('SIGINT'));
 process.once('SIGTERM', () => bot.stop('SIGTERM'));
+const server = Bun.serve({
+  port: process.env.PORT || 3000,
+  fetch() {
+    return new Response('Bot is alive!', { status: 200 });
+  },
+});
+console.log(`Server running on port ${server.port}`);
